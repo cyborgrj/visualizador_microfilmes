@@ -1,21 +1,6 @@
 import PySimpleGUI as sg
-from tkinter import *
 import os
-from PIL import Image, ImageTk
-import io
 import subprocess
-
-# usar o PIL para ler cada imagem...
-def get_img_data(f, maxsize=(1200, 850), first=False):
-# Gerar imagem usando o PIL
-        img = Image.open(f)
-        img.thumbnail(maxsize)
-        if first:
-            bio = io.BytesIO()
-            img.save(bio, format="PNG")
-            del img
-            return bio.getvalue()
-        return ImageTk.PhotoImage(img)
 
 encerra_programa = False
 
