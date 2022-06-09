@@ -79,76 +79,20 @@ while True:
         programa_fechado = 0
         break
 microfilme.close()
-#  "" "C:\Visualizador de Microfilmes\Microfilmes\7864" /filepattern=*.jpg /thumbs
+
 rolo_microfilme = values[0]
+caminho_microfilmes = r'C:\Visualizador de Microfilmes\Microfilmes'
+
+thumbArg = r' /filepattern=*.jpg /thumbs'
+# Argumento para abrir a pasta no irfanview no modo de thumbnails (miniaturas)
+
 
 if programa_fechado != 1:
-    folder = os.path.join(caminho_microfilmes, rolo_microfilme)
-    if not folder:
-        sg.popup_cancel('Pasta de arquivos inválida, cancelando...')
-        raise SystemExit()
-
-    # Possíveis tipos de imagem em que os arquivos de microfilmes normalmente são gravados.
-    img_types = (".png", ".jpg", "jpeg", ".tiff")
-
-    # Gerar lista de arquivos na pasta
-    flist0 = os.listdir(folder)
-
-    # Criar uma sub-lista somente com os arquivos válidos, verificando o final da string do arquivo.
-    fnames = [f for f in flist0 if os.path.isfile(os.path.join(folder, f)) and f.lower().endswith(img_types)]
-
-    num_files = len(fnames)                # quantidade de imagens encontradas
-    if num_files == 0:
-        sg.popup('No files in folder')
-        raise SystemExit()
-    del flist0                             # Apagar a lista inicial (antes de limpar o "lixo")
-
-    # Criar 2 elementos fora o layout que serão utilizados para lista de arquivos e visualização da imagem
-    # começar com o primeiro arquivo da lista, para não exibir o frame em branco
-    filename = os.path.join(folder, fnames[0])  # nome do primeiro arquivo na lista
-    image_elem = sg.Image(data=get_img_data(filename, first=True))
-    filename_display_elem = sg.Text(filename, size=(50, 3))
-    file_num_display_elem = sg.Text('Arquivo 1 de {}'.format(num_files), size=(15, 1))
-
-    # define o layout, formulário de exibição e seleção
-    col = [[filename_display_elem],
-        [image_elem]]
-
-    col_files = [[sg.Listbox(values=fnames, change_submits=True, size=(20, 35), key='listbox')],
-                 [sg.Button('Anterior', size=(8, 2)), sg.Button('Próximo', size=(8, 2)), file_num_display_elem]]
-
-    layout = [[sg.Column(col_files), sg.Column(col)]]
-    window = sg.Window('Visualizador de imagens dos protocolos', layout, size=(1300, 760), return_keyboard_events=True,
-                       location=(0, 0), use_default_focus=False)
-    # Entrer em loop "infinito" enquanto lê a entrada de comandos do usuário e exibe as imagens.
-    i = 0
-    while True:
-        event, values = window.read()
-        print(event, values)
-        # Ler ações do mouse e teclado
-        if event == sg.WIN_CLOSED:
-            break
-        elif event in ('Próximo', 'MouseWheel:Down', 'Down:40', 'Next:34'):
-            i += 1
-            if i >= num_files:
-                i -= num_files
-            filename = os.path.join(folder, fnames[i])
-        elif event in ('Anterior', 'MouseWheel:Up', 'Up:38', 'Prior:33'):
-            i -= 1
-            if i < 0:
-                i = num_files + i
-            filename = os.path.join(folder, fnames[i])
-        elif event == 'listbox':            # Caso escolha um arquivo na caixa de seleção à esquerda
-            f = values["listbox"][0]            # pegar o valor selecionado
-            filename = os.path.join(folder, f)  # ler o arquivo
-            i = fnames.index(f)                 # atualizar o índice
-        else:
-            filename = os.path.join(folder, fnames[i])
-
-        # atualizar a janela com a nova imagem
-        image_elem.update(data=get_img_data(filename, first=True))
-        # atualizar a janela com o nome do arquivo
-        filename_display_elem.update(filename)
-        # atualizar a exibição de quantidade de arquivos
-        file_num_display_elem.update('Arquivo {} de {}'.format(i+1, num_files))
-    window.close()
+    pasta_rolo = '"' + os.path.join(caminho_microfilmes, rolo_microfilme) + '"'
+    argumentos = pasta_rolo + thumbArg
+    irfanview_path = r'"C:\Program Files\IrfanView\i_view64.exe"'
+    cmd = irfanview_path + " " + argumentos
+    print(cmd)
+    subprocess.call(cmd)
+else:
+    raise SystemExit()

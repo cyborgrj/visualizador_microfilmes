@@ -11,3 +11,7 @@ Histórico de versões:
 
 Versão 1.0:
 Nesta versão há um visualizador interno de imagens, que mostra uma lista à esquerda com todas as imagens referente ao rolo pesquisado.
+
+Versão 2.0:
+Aqui já passou a ser utilizado o visualizador irfanview_64 que é uma ferramente para visualização de imagems leve e robusta, 
+permitindo também o uso de navegação por meio de miniaturas, o que facilita a localização dos arquivos necessários.
